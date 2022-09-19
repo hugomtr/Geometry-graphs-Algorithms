@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Core/vector.h"
+#include "Core/line.h"
 #include "Core/Plane.h"
+#include "Geo/intersection.h"
 
 
 int main(){
@@ -28,6 +30,18 @@ int main(){
     Vector<4> v6(arrv6);
 
     std::cout << "v5 * v6 " << v5*v6 << std::endl;
+
+    Vector2f v21(0,0);
+    Vector2f v22(1,2);
+    Vector2f v23(-1,2);
+    Vector2f v24(-1,-1);
+
+    Line2d line1(v22,v21);
+    Line2d line2(v23,v24);
+
+    Point2d point_intersect(0.0f,0.0f);
+    std::cout << "intersect ?" << intersect(line1,line2,point_intersect) << std::endl;
+    std::cout << "point_intersect " << point_intersect << std::endl;
 
     Vector3f v7(2,1,-1);
     Vector3f v8(0,-2,0);

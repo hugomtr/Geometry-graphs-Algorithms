@@ -19,7 +19,7 @@ public:
         // find the "constante" => dot product between v1 (origin of our plane) and the normal vector
         d = v1.dotProd(normal);
     };
-
+    
     friend std::ostream& operator<<(std::ostream& out,Plane<dimension>& plane){out << "Plane : [ normal_vector :  " << plane.normal << ", constante : " << plane.d ;
         return out;} 
 };

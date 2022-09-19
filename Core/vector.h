@@ -26,14 +26,14 @@ public:
     ~Vector() = default;
 
     // defining useful operators
-    bool operator==(const Vector<dimension>& other);
-    bool operator!=(const Vector<dimension>& other);
-    Vector<dimension> operator+(const Vector<dimension>& other);
-    Vector<dimension> operator-(const Vector<dimension>& other);
-    bool operator<=(const Vector<dimension>& other);
-    bool operator>=(const Vector<dimension>& other);
+    bool operator==(const Vector<dimension>& other) const; 
+    bool operator!=(const Vector<dimension>& other) const;
+    Vector<dimension> operator+(const Vector<dimension>& other) const;
+    Vector<dimension> operator-(const Vector<dimension>& other) const;
+    bool operator<=(const Vector<dimension>& other) const;
+    bool operator>=(const Vector<dimension>& other) const;
     float operator[](const unsigned int) const;
-    Vector<dimension> operator*(const Vector<dimension>& other);
+    Vector<dimension> operator*(const Vector<dimension>& other) const;
     float dotProd(const Vector<dimension>& other);
     Vector<dimension> cross_prod(const Vector<dimension>& other);
     float norm2();
@@ -57,7 +57,7 @@ template <size_t dimension>
 std::ostream& operator<<(std::ostream& out, const Vector<dimension>& vector)
 {
     std::array<float,dimension> _coords = vector.get_coords();
-    out << "Vector : [ size :  " << dimension << ": ";
+    out << "Vector : size :  " << dimension << ": [";
     for(auto coord: _coords){
         out << coord << ", ";
     } 
@@ -66,7 +66,7 @@ std::ostream& operator<<(std::ostream& out, const Vector<dimension>& vector)
 }
 
 template <size_t dimension>
-bool Vector<dimension>::operator==(const Vector<dimension>& other){
+bool Vector<dimension>::operator==(const Vector<dimension>& other) const{
     for (size_t i{0}; i < dimension; i++){
         if (other.coords[i] != coords[i]){
             return false;
@@ -76,12 +76,12 @@ bool Vector<dimension>::operator==(const Vector<dimension>& other){
 };
 
 template <size_t dimension>
-bool Vector<dimension>::operator!=(const Vector<dimension>& other){
+bool Vector<dimension>::operator!=(const Vector<dimension>& other) const{
     return (!(*this == other));
 };
 
 template <size_t dimension>
-bool Vector<dimension>::operator<=(const Vector<dimension>& other){
+bool Vector<dimension>::operator<=(const Vector<dimension>& other) const{
     for (size_t i{0}; i < dimension; i++){
         if (other.coords[i] >= coords[i]){
             return false;
@@ -91,12 +91,12 @@ bool Vector<dimension>::operator<=(const Vector<dimension>& other){
 };
 
 template <size_t dimension>
-bool Vector<dimension>::operator>=(const Vector<dimension>& other){
+bool Vector<dimension>::operator>=(const Vector<dimension>& other) const{
     return (!(*this <= other));
 };
 
 template <size_t dimension>
-Vector<dimension> Vector<dimension>::operator+(const Vector<dimension>& other){
+Vector<dimension> Vector<dimension>::operator+(const Vector<dimension>& other) const{
     std::array<float,dimension> arr;
     Vector<dimension> sum_vec(arr);
     for (size_t i{0}; i < dimension; i++){
@@ -106,7 +106,7 @@ Vector<dimension> Vector<dimension>::operator+(const Vector<dimension>& other){
 };
 
 template <size_t dimension>
-Vector<dimension> Vector<dimension>::operator-(const Vector<dimension>& other){
+Vector<dimension> Vector<dimension>::operator-(const Vector<dimension>& other) const{
     std::array<float,dimension> arr;
     Vector<dimension> sum_vec(arr);
     for (size_t i{0}; i < dimension; i++){
@@ -116,7 +116,7 @@ Vector<dimension> Vector<dimension>::operator-(const Vector<dimension>& other){
 };
 
 template <size_t dimension>
-Vector<dimension> Vector<dimension>::operator*(const Vector<dimension>& other){
+Vector<dimension> Vector<dimension>::operator*(const Vector<dimension>& other) const{
     std::array<float,dimension> arr;
     Vector<dimension> prod_vec(arr);
     for (size_t i{0}; i < dimension; i++){
