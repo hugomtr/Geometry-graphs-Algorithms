@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Core/vector.h"
+#include "Core/Plane.h"
+
 
 int main(){
     Vector<3> v1(1,2,3);
@@ -26,5 +28,15 @@ int main(){
     Vector<4> v6(arrv6);
 
     std::cout << "v5 * v6 " << v5*v6 << std::endl;
+
+    Vector3f v7(2,1,-1);
+    Vector3f v8(0,-2,0);
+    Vector3f v9(1,-1,2);
+
+    Plane<3> plane(v7,v8,v9);
+    Plane<3> planebis(v7,5);
+    std::cout << "plane " << plane << std::endl;
+    std::cout << "plane " << v7 -v8 << std::endl;
+
     return 0;
 }
