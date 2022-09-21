@@ -37,4 +37,12 @@ float areaTriangle3d(Point2d p1,Point2d p2,Point2d p3){
     // formule du determinant    
 }
 
-int orientation3d(){}
+// int orientation3d(){}
+
+bool coplaner(Point3d& a,Point3d& b,Point3d& c){
+	float value = scalerTripleProduct(a,b,c);
+	if (isEqualZ(value)){
+		return true;
+	}
+	return false;
+}

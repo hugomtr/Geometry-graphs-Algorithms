@@ -4,6 +4,7 @@
 #include <iostream>
 #include <array>
 #include <cmath>
+#include "../Helper/helper.h"
 
 #define DIM2 2
 #define DIM3 3
@@ -34,10 +35,12 @@ public:
     bool operator>=(const Vector<dimension>& other) const;
     float operator[](const unsigned int) const;
     Vector<dimension> operator*(const Vector<dimension>& other) const;
-    float dotProd(const Vector<dimension>& other);
-    Vector<dimension> cross_prod(const Vector<dimension>& other);
-    float norm2();
+    Vector<dimension> operator*(float lambda) const;
+    float dotProd(const Vector<dimension>& other) const;
+    Vector<dimension> cross_prod(const Vector<dimension>& other) const;
+    float norm2() const;
     void normalize();
+    bool colinear(const Vector<dimension>& _other) const;
 
     // getter & setter 
     std::array<float, dimension> get_coords() const {return coords;};  
@@ -125,6 +128,16 @@ Vector<dimension> Vector<dimension>::operator*(const Vector<dimension>& other) c
     return prod_vec;
 };
 
+template <size_t dimension>
+Vector<dimension> Vector<dimension>::operator*(float lambda) const{
+    std::array<float,dimension> arr;
+    Vector<dimension> prod_vec(arr);
+    for (size_t i{0}; i < dimension; i++){
+        prod_vec.coords[i] = coords[i] * lambda; 
+    }
+    return prod_vec;
+};
+
 template<size_t dimensions>
 float Vector<dimensions>::operator[](const unsigned int _index) const
 {
@@ -136,7 +149,7 @@ float Vector<dimensions>::operator[](const unsigned int _index) const
 }
 
 template <size_t dimension>
-float Vector<dimension>::dotProd(const Vector<dimension>& other){
+float Vector<dimension>::dotProd(const Vector<dimension>& other) const {
     Vector<dimension> vec = (*this) * other;
     float sum{0.0f};
     for (size_t i{0}; i < dimension; i++){
@@ -146,7 +159,7 @@ float Vector<dimension>::dotProd(const Vector<dimension>& other){
 };
 
 template <size_t dimension>
-Vector<dimension> Vector<dimension>::cross_prod(const Vector<dimension>& other){
+Vector<dimension> Vector<dimension>::cross_prod(const Vector<dimension>& other) const{
     std::array<float,dimension> arr;
     Vector<dimension> cross_vec(arr);
     if (dimension == 2 || dimension > 3)
@@ -162,7 +175,7 @@ Vector<dimension> Vector<dimension>::cross_prod(const Vector<dimension>& other){
 };
 
 template <size_t dimension>
-float Vector<dimension>::norm2(){
+float Vector<dimension>::norm2() const {
     float value{0.0f};
     for (size_t i{0}; i < dimension; ++i){
         value += coords[i]*coords[i];
@@ -178,9 +191,25 @@ void Vector<dimension>::normalize(){
     }
 }
 
+template <size_t dimension>
+bool Vector<dimension>::colinear(const Vector<dimension>& _other) const {
+    std::array<float,dimension> _other_coords = _other.get_coords();
+    float sum = coords[X]*_other_coords[Y] - coords[Y]*_other_coords[X] + 
+    coords[Y]*_other_coords[Z] - coords[Z]*_other_coords[Y] + 
+    coords[X]*_other_coords[Z] - coords[Z]*_other_coords[X];
+
+    if (isEqualZ(sum)){
+        return true;
+    }
+    return false;
+}
+
 float crossProduct2d(Vector2f& a, Vector2f& b);
 
-Vector2f prependicluar(Vector2f&);
+/* u.(v*w) */
+float scalerTripleProduct(Vector3f& a, Vector3f& b, Vector3f& c);
+
+Vector2f perpendicluar(Vector2f&);
 
 bool orthogonal(Vector3f a, Vector3f b);
 

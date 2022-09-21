@@ -13,3 +13,8 @@ bool orthogonal(Vector3f a, Vector3f b){
     float dotProd = a.dotProd(b);
     return isEqualZ(dotProd);
 }
+
+float scalerTripleProduct(Vector3f& a, Vector3f& b, Vector3f& c){
+    Vector3f cross_prod = b.cross_prod(c);
+    return a.dotProd(cross_prod);
+}
