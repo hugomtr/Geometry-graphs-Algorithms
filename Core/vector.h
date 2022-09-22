@@ -46,7 +46,6 @@ public:
     std::array<float, dimension> get_coords() const {return coords;};  
     void assign(float value,int position){
         coords[position] = value;
-        std::cout << value <<std::endl;
     };
 
 private:

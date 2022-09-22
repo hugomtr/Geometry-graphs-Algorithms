@@ -4,7 +4,8 @@
 #include "Core/Plane.h"
 #include "Geo/intersection.h"
 #include "Geo/angle.h"
-
+#include "Core/polygon.h"
+#include "Geo/geo_utils.h"
 
 int main(){
     // Vector<3> v1(1,2,3);
@@ -87,25 +88,52 @@ int main(){
     // Point3d p0(0,0,0);
 	// Plane p(pNormal,p0);
 
-	// auto resultp = angleLinePlane(l1, p);
-	// std::cout << resultp << std::endl;
-
-
     // Vector3f v31(1,2,3);
     // Vector3f v32(2,4,5);
 	// std::cout << v31.colinear(v32) << std::endl;
 
-    Vector3f n(2,3,4);
-    Plane p(n, 8.0f);
+    // Vector3f n(2,3,4);
+    // Plane p(n, 8.0f);
     
-    Point3d A(2,2,3);
-    Point3d B(4,3,6);
+    // Point3d A(2,2,3);
+    // Point3d B(4,3,6);
 
-    Line AB(A,B);
+    // Line AB(A,B);
 
-    Point3d intersect_point;
-    std::cout << intersectLinePlane(AB,p,intersect_point) << std::endl;
-    std::cout << intersect_point << std::endl;
+    // Point3d intersect_point;
+    // std::cout << intersectLinePlane(AB,p,intersect_point) << std::endl;
+    // std::cout << intersect_point << std::endl;
 
+    Vector2f v1(0,0);
+    Vector2f v2(0,2);
+    Vector2f v3(1,2);
+    Vector2f v4(0,3);
+    Vector2f v5(-1,2);
+    Vector2f v6(-1,1);
+
+    std::list<Vector2f> l{v1,v2,v3,v4,v5,v6};
+    Polygon p(l);
+    std::cout << "false : =?" << is_diagonal(p.get_vertex_list()[5],p.get_vertex_list()[2],p) << std::endl;
+
+    // Point2d m;
+    // Line2d l1(v2,v3);
+    // Line2d l2(v6,v4);
+    // intersect(l1,l2,m);
+    // int type_intersection = orientation2d(v6,v4,m);
+    // bool f = type_intersection == ON_SEGMENT;
+    // std::cout << "m" << f << std::endl;
+
+    std::cout << "true : =?" << is_diagonal(p.get_vertex_list()[5],p.get_vertex_list()[3],p) << std::endl;
+    // std::cout << "false : =?" << p.get_vertex_list()[0].get_vertex_type2d() << std::endl;
+    // std::cout << "false : =?" << p.get_vertex_list()[1].get_vertex_type2d() << std::endl;
+    // std::cout << "false : =?" << p.get_vertex_list()[2].get_vertex_type2d() << std::endl;
+    // std::cout << "false : =?" << p.get_vertex_list()[3].get_vertex_type2d() << std::endl;
+    // std::cout << "false : =?" << p.get_vertex_list()[4].get_vertex_type2d() << std::endl;
+    // std::cout << "false : =?" << p.get_vertex_list()[5].get_vertex_type2d() << std::endl;
+    
+    // std::cout << "f" << p.get_vertex_list()[0].pred->point << std::endl;
+    // std::cout << "f" << p.get_vertex_list()[4].next->point << std::endl;
+    // std::cout << "f" << p.get_vertex_list()[5].next->point << std::endl;
     return 0;
 }
+

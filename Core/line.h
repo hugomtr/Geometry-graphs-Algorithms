@@ -13,7 +13,7 @@ public:
     Line(const Vector<dimension>& _start_point, const Vector<dimension>& _end_point){
         start_point = _start_point;
         direction = _end_point - _start_point;
-        direction.normalize();
+        //direction.normalize();
     };    
 
     Vector<dimension> get_start_point() const { return start_point;}

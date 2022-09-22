@@ -1,12 +1,5 @@
 #include "angle.h"
 
-template<size_t dim>
-static float get_angle(Vector<dim> v1, Vector<dim> v2){
-    auto dot = v1.dotProd(v2);
-    auto angle = acos(std::abs(dot));
-    return radianceToDegrees(angle);
-}
-
 float angleLine2d(const Line2d& l1, const Line2d& l2){
     return get_angle(l1.get_direction(), l2.get_direction());
 }
