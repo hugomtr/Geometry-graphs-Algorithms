@@ -18,5 +18,3 @@ bool coplaner(const Point3d& a, const Point3d& b, const Point3d& c);
 
 bool is_diagonal(const Vertex2d& v1,const Vertex2d& v2,const Polygon2d& p);
 #endif
-
-

@@ -103,9 +103,6 @@ bool is_diagonal(const Vertex2d& start_vertex,const Vertex2d& end_vertex,const P
 	*/
 
 	if (type == Reflex ){
-		std::cout << start_vertex.point << std::endl;
-		std::cout << start_vertex.next->point << std::endl;
-		std::cout << start_vertex.pred->point << std::endl;
 		Point2d M;
 		Line2d neighbors_segment((start_vertex.pred)->point,(start_vertex.next)->point);
 

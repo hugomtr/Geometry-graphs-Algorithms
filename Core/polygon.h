@@ -1,9 +1,12 @@
-#pragma once
+#ifndef POLYGON_H
+#define POLYGON_H
 #include <iostream>
 #include <vector>
 #include <list>
 #include "vector.h"
 #include "../Geo/intersection.h"
+#include "../Geo/geo_utils.h"
+
 
 enum VERTEX_TYPE {
     Convex,Reflex
@@ -14,6 +17,7 @@ struct Vertex{
     Vector<dimension> point;
     Vertex<dimension>* next;
     Vertex<dimension>* pred;
+    bool is_ear;
 
     Vertex(const Vector<dimension>& _point)
     : point(_point), next(nullptr), pred(nullptr){}
@@ -36,6 +40,14 @@ struct Vertex{
             return Convex;
         }
     }
+};
+
+template<size_t dimension>
+struct Edge {
+    Vertex<dimension> start;
+    Vertex<dimension> end;
+
+    Edge(Vertex<dimension>& v1,Vertex<dimension>& v2): start(v1),end(v2){}
 };
 
 template<size_t dimension>
@@ -76,10 +88,17 @@ public:
     }
 
     std::vector<Vertex<dimension>> get_vertex_list() const {return vertex_list;};
-};
 
+    void set_vertex_list(std::vector<Vertex<dimension>> _vertex_list) {vertex_list = _vertex_list;};
+};
 
 typedef Polygon<3> Polygon3d;
 typedef Polygon<2> Polygon2d;
+typedef Edge<3> Edge3d;
+typedef Edge<2> Edge2d;
 typedef Vertex<3> Vertex3d;
 typedef Vertex<2> Vertex2d;
+
+bool is_convex(Vertex2d& v0,Vertex2d& v1,Vertex2d& v2);
+
+#endif
