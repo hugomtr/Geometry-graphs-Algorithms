@@ -4,6 +4,9 @@ test*
 # build folder
 build/
 
+# build folder
+lib/
+
 # vs code config folder
 vscode/
 
