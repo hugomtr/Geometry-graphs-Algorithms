@@ -52,48 +52,47 @@ struct Edge {
     Vertex<dimension> end;
 
     Edge(Vertex<dimension>& v1,Vertex<dimension>& v2): start(v1),end(v2){}
+
 };
 
 template<size_t dimension>
 class Polygon {
-    std::vector<Vertex<dimension>> vertex_list;
+    std::vector<Vertex<dimension> *> vertex_list;
 public:
     Polygon() = default;
-    Polygon(std::vector<Vertex<dimension>>& _vertex_list){
-        std::size_t n = _vertex_list.size();
-        
-        if (n < 3){
-            std::cout << "Not enough vertex must be >= 3" << std::endl;
-            return;
-        }
-        vertex_list = _vertex_list;
-
-    }
+    // ~Polygon() {
+    //     Vertex<dimension> * curr_ptr = vertex_list[0]->next;
+    //     Vertex<dimension> * next;
+    //     while(curr_ptr != vertex_list[0]){
+    //         next = curr_ptr->next;
+    //         delete curr_ptr;
+    //         curr_ptr = next;
+    //     }
+    //     delete vertex_list[0];
+    // }
 
     /* points have to be initialized in counter-clockwise-order */
     Polygon(const std::list<Vector<dimension>>& _vector_list){
-        const unsigned int n = _vector_list.size();
-        if (n < 3){
+
+        const unsigned int size = _vector_list.size();
+        if (size < 3){
             std::cout << "Not enough vertex must be >= 3" << std::endl;
             return;
         }
 
         for (auto const& v : _vector_list){
-            vertex_list.push_back(Vertex<dimension>(v));
+            vertex_list.push_back(new Vertex<dimension>(v));
         }
 
-        for(std::size_t i{0}; i < n;i++){
-            vertex_list[i].next = &(vertex_list[i+1]);
-            vertex_list[i].pred = &(vertex_list[i-1]);
+        for(std::size_t i{0}; i < size ;i++){
+            vertex_list[i]->next = vertex_list[(i+1) % size];
+            vertex_list[i]->pred = vertex_list[(i-1 + size) % size];
         }
-
-        vertex_list[0].pred = &(vertex_list[n-1]);
-        vertex_list[n-1].next = &(vertex_list[0]);
     }
 
-    std::vector<Vertex<dimension>> get_vertex_list() const {return vertex_list;};
-
-    void set_vertex_list(std::vector<Vertex<dimension>> _vertex_list) {vertex_list = _vertex_list;};
+    std::vector<Vertex<dimension> *> get_vertex_list_ptr() const {
+        return vertex_list;
+    }
 };
 
 typedef Polygon<3> Polygon3d;

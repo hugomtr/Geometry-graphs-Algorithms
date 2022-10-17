@@ -16,5 +16,5 @@ float areaTriangle3d(Point2d p1,Point2d p2,Point2d p3);
 
 bool coplaner(const Point3d& a, const Point3d& b, const Point3d& c);
 
-bool is_diagonal(const Vertex2d& v1,const Vertex2d& v2,const Polygon2d& p);
+bool is_diagonal(const Vertex2d* v1,const Vertex2d* v2,const Polygon2d* p);
 #endif

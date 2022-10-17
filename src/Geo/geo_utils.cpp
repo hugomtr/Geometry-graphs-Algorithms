@@ -43,83 +43,80 @@ bool coplaner(Point3d& a,Point3d& b,Point3d& c){
 	return false;
 }
 
-bool is_diagonal(const Vertex2d& start_vertex,const Vertex2d& end_vertex,const Polygon2d& p){
-	std::vector<Vertex2d> vertex_list;
-	size_t n = (p.get_vertex_list()).size();
+bool is_diagonal(const Vertex2d* v1,const Vertex2d* v2,const Polygon2d* polygon_ptr){
 
-	if(n == 0)
-		vertex_list = p.get_vertex_list();
-	else {
-		auto vertex_ptr = start_vertex.next;
-		vertex_list.push_back(start_vertex);
-		while (vertex_ptr != &start_vertex) {
-			vertex_list.push_back(*vertex_ptr);
+	std::vector<Vertex2d *> vertex_list;
+
+	if(polygon_ptr){
+		//Polygon2d p = *polygon_ptr;
+		vertex_list = polygon_ptr->get_vertex_list_ptr();
+	} else {
+		auto vertex_ptr = v1->next;
+		vertex_list.push_back((Vertex2d*)v1);
+		while (vertex_ptr->point != v1->point) {
+			vertex_list.push_back((Vertex2d*)vertex_ptr);
 			vertex_ptr = vertex_ptr->next;
 		}
 	}
 
+	Line2d v1v2(v1->point, v2->point);
+
 	/* Test 1 line should not intersect with any other edges */
-	n = (p.get_vertex_list()).size();
-	std::list<Line2d> edges_list;
-	const Point2d A(start_vertex.point);
-	const Point2d B(end_vertex.point);
-	const Line2d diagonal(A,B);
 
-	for (size_t i = 0; i < n;i++){
-		Vertex2d vertex_candidate = vertex_list[i];
-		// just making sure that we don't consider edges starting or ending on the 2 vertex
-		if (&start_vertex != &vertex_candidate && &start_vertex != vertex_candidate.next 
-			&& &end_vertex != &vertex_candidate && &end_vertex != vertex_candidate.next)
-		{
-			Line2d edge(vertex_list[i].point,(vertex_list[i].next)->point);
-			edges_list.push_back(edge);
-		}
-	}
+	Vertex2d *current, *next;
+	for (size_t i = 1; i <vertex_list.size(); i++){
+		current = vertex_list[i];
+		next = vertex_list[i]->next;
 
-	for (const Line2d& edge : edges_list){
-		Point2d M;
-		// M store the intersection point
-		if (intersect(edge,diagonal,M)){
-			int type_intersection = orientation2d(edge.get_start_point(),edge.get_start_point() + edge.get_direction(),M);
-			int type_intersection_bis = orientation2d(A,B,M);
-			if (type_intersection == ON_SEGMENT && type_intersection_bis == ON_SEGMENT){
-				// M is the intersection point between an edge segment and the diagonal candidate segment
-				int type_intersection_bis = orientation2d(A,B,M);
-				return false;
-			}
+		Point2d intersect_point;
+		Line2d currentNext(current->point, next->point);
+		bool on_segment = false;
+		
+		intersect(v1v2, currentNext,intersect_point);
+		int type_intersection_curr_next = orientation2d(current->point, next->point,intersect_point);
+		int type_intersection_v1v2 = orientation2d(v1->point, v2->point, intersect_point);
+		
+
+		if (type_intersection_curr_next == ON_SEGMENT && type_intersection_v1v2 == ON_SEGMENT){
+			on_segment = true;
 		}
-	}
+		
+		if (current != v1 && next != v1 && current != v2 && next != v2
+			&& on_segment){ 
+			return false;
+		}
+	} 
 
 	/* 
 	Test 2 If the start vertex is a convex vertex then, 
 	the neighbors should lie on different sides of the line
-	*/
+	*/ 
 
-	VERTEX_TYPE type = start_vertex.get_vertex_type2d();
+	VERTEX_TYPE type = v1->get_vertex_type2d();
 	if (type == Convex ){
-		int type_orientation_pred = orientation2d(A,B,(start_vertex.pred)->point);
-		int type_orientation_next = orientation2d(A,B,(start_vertex.next)->point);
+		int type_orientation_pred = orientation2d(v1->point,v2->point,v1->pred->point);
+		int type_orientation_next = orientation2d(v1->point,v2->point,v1->next->point);
 		bool condition = (type_orientation_pred == LEFT && type_orientation_next == RIGHT) || (type_orientation_pred == RIGHT && type_orientation_next == LEFT);
 		if (!condition){
 			return false;
 		}
 	}
 
-	/* 
-	Test 3 If the start vertex is a reflex vertex then, 
-	it should not be an exterior line
-	*/
+	// /* 
+	// Test 3 If the start vertex is a reflex vertex then, 
+	// (start_vertex,end_vertex) should not be an exterior line
+	// */
 
 	if (type == Reflex ){
 		Point2d M;
-		Line2d neighbors_segment((start_vertex.pred)->point,(start_vertex.next)->point);
+		Line2d neighbors_segment((v1->pred)->point,(v1->next)->point);
 
-		// M store the intersection point of segment [start_vertex.next,start_vertex.pred]
+		// M store the intersection point of segment [v1.next,v1.pred]
 		// and diagonal line
-		
-		intersect(neighbors_segment,diagonal,M);
-		int type_intersection = orientation2d(A,B,(start_vertex.next)->point);
+		intersect(v1v2,neighbors_segment,M);
+		int type_intersection = orientation2d(v1->point,v2->point,v1->next->point);
 		if (type_intersection == ON_SEGMENT){
+			std::cout << "in 3" << std::endl;
 			return false;
 		}
 	}
