@@ -1,5 +1,13 @@
-rooster
-.vscode/
-main
-rooster
+main*
 test*
+
+# build folder
+build/
+
+# vs code config folder
+vscode/
+
+# Executables
+*.exe
+*.out
+*.app
