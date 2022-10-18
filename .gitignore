@@ -1,14 +1,16 @@
-main*
+main
 test*
 
 # build folder
 build/
 
 # build folder
-lib/
+lib/glfw/**
+lib/glm/**
+lib/stb/**
 
 # vs code config folder
-vscode/
+.vscode/
 
 # Executables
 *.exe
